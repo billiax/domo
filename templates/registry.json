@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "updatedAt": "2026-03-17T00:00:00.000Z",
+  "templates": [
+    {
+      "id": "github-cleanup",
+      "name": "GitHub Menu Cleanup",
+      "description": "Hide distracting GitHub menu items, expand sidebar repos, and clean up empty menu sections",
+      "author": "billiax",
+      "version": "1.0.0",
+      "website": "github.com",
+      "platform": "github",
+      "tags": ["github", "cleanup", "productivity"],
+      "match": { "type": "site", "host": "github.com" },
+      "url": "github/cleanup.json"
+    },
+    {
+      "id": "github-tweaks",
+      "name": "GitHub Tweaks",
+      "description": "Auto-expand hamburger menu repos and auto-switch to dev branch on repo pages",
+      "author": "billiax",
+      "version": "1.0.0",
+      "website": "github.com",
+      "platform": "github",
+      "tags": ["github", "automation", "productivity"],
+      "match": { "type": "site", "host": "github.com" },
+      "url": "github/tweaks.json"
+    },
+    {
+      "id": "billiax-toolbar",
+      "name": "Billiax Toolbar",
+      "description": "Fixed navigation toolbar with org links, repo shortcuts, visual modes (Compact/Focus/Hacker/Midnight), help overlay, and quick issue creator",
+      "author": "billiax",
+      "version": "1.0.0",
+      "website": "github.com",
+      "platform": "github",
+      "tags": ["github", "toolbar", "navigation", "modes"],
+      "match": { "type": "site", "host": "github.com" },
+      "url": "github/billiax-toolbar.json"
+    },
+    {
+      "id": "billiax-dashboard",
+      "name": "Billiax Dashboard",
+      "description": "Repo grid with quick actions on the GitHub homepage",
+      "author": "billiax",
+      "version": "1.0.0",
+      "website": "github.com",
+      "platform": "github",
+      "tags": ["github", "dashboard", "homepage"],
+      "match": { "type": "exact", "url": "https://github.com/" },
+      "url": "github/billiax-dashboard.json"
+    },
+    {
+      "id": "jira-cleanup",
+      "name": "Jira UI Cleanup",
+      "description": "Hide promotional banners, upgrade nudges, feedback buttons, and UI clutter from Jira Cloud",
+      "author": "billiax",
+      "version": "1.0.0",
+      "website": "*.atlassian.net",
+      "platform": "jira",
+      "tags": ["jira", "cleanup", "productivity"],
+      "match": { "type": "site", "host": "*.atlassian.net" },
+      "url": "jira/cleanup.json"
+    },
+    {
+      "id": "jira-compact-board",
+      "name": "Jira Compact Board & Focus Mode",
+      "description": "Compact board cards, true full-screen mode hiding sidebar and navigation, sticky column headers, and equal-width columns",
+      "author": "billiax",
+      "version": "1.0.0",
+      "website": "*.atlassian.net",
+      "platform": "jira",
+      "tags": ["jira", "board", "compact", "focus", "productivity"],
+      "match": { "type": "site", "host": "*.atlassian.net" },
+      "url": "jira/compact-board.json"
+    },
+    {
+      "id": "jira-card-colors",
+      "name": "Jira Card Color Coding",
+      "description": "Color-code board cards by priority (border stripe) and work type (background tint) with flagged item highlighting",
+      "author": "billiax",
+      "version": "1.0.0",
+      "website": "*.atlassian.net",
+      "platform": "jira",
+      "tags": ["jira", "board", "colors", "priority", "productivity"],
+      "match": { "type": "site", "host": "*.atlassian.net" },
+      "url": "jira/card-colors.json"
+    },
+    {
+      "id": "system-hider",
+      "name": "Element Hider",
+      "description": "Hide any element on any website. Press Alt+H to enter hide mode, click elements to hide them.",
+      "author": "domo",
+      "version": "1.0.0",
+      "platform": "system",
+      "tags": ["system", "hider", "utility"],
+      "match": { "type": "site", "host": "*" },
+      "url": "system/hider.json"
+    },
+    {
+      "id": "system-shortcuts",
+      "name": "Keyboard Shortcuts",
+      "description": "Define custom keyboard shortcuts per-site. Navigate, click, scroll, toggle visibility, or run JS snippets.",
+      "author": "domo",
+      "version": "1.0.0",
+      "platform": "system",
+      "tags": ["system", "shortcuts", "utility", "keyboard"],
+      "match": { "type": "site", "host": "*" },
+      "url": "system/shortcuts.json"
+    }
+  ]
+}

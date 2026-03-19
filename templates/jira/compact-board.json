@@ -1,0 +1,49 @@
+{
+  "id": "jira-compact-board",
+  "name": "Jira Compact Board & Focus Mode",
+  "description": "Compact board cards, true full-screen mode hiding sidebar and navigation, sticky column headers, and equal-width columns",
+  "author": "billiax",
+  "version": "1.0.0",
+  "tags": ["jira", "board", "compact", "focus", "productivity"],
+  "website": "*.atlassian.net",
+  "platform": "jira",
+  "match": { "type": "site", "host": "*.atlassian.net" },
+  "defaultPriority": 50,
+  "options": {
+    "compactCards": {
+      "type": "boolean",
+      "default": true,
+      "label": "Compact card mode (reduced padding, smaller fonts)"
+    },
+    "ultraCompact": {
+      "type": "boolean",
+      "default": false,
+      "label": "Ultra-compact (title + type icon only)"
+    },
+    "fullScreenMode": {
+      "type": "boolean",
+      "default": false,
+      "label": "True full-screen (hide sidebar + project nav)"
+    },
+    "stickyHeaders": {
+      "type": "boolean",
+      "default": true,
+      "label": "Sticky column headers while scrolling"
+    },
+    "equalColumns": {
+      "type": "boolean",
+      "default": true,
+      "label": "Equal-width columns using all available space"
+    },
+    "cardCountBadges": {
+      "type": "boolean",
+      "default": true,
+      "label": "Prominent card count badges on column headers"
+    }
+  },
+  "code": {
+    "css": "{{#compactCards}}\n/* Kill Jira's transition:all */\n[data-testid=\"platform-board-kit.ui.card.card\"],\n[data-testid=\"platform-board-kit.ui.card.card\"] *,\n[data-testid=\"software-board.board-container.board.card-container.card-with-icc\"] { transition: none !important; }\n/* Compact: force 12px on li>div AND all nested divs/spans — Jira sets explicit 14px on title divs that overrides inheritance */\n[data-testid=\"software-board.board-container.board.virtual-board.fast-virtual-list.fast-virtual-list-wrapper\"] > li > div,\n[data-testid=\"software-board.board-container.board.virtual-board.fast-virtual-list.fast-virtual-list-wrapper\"] > li div,\n[data-testid=\"software-board.board-container.board.virtual-board.fast-virtual-list.fast-virtual-list-wrapper\"] > li span,\n[data-testid=\"software-board.board-container.board.virtual-board.fast-virtual-list.fast-virtual-list-wrapper\"] > li a { font-size: 12px !important; line-height: 16px !important; transition: none !important; }\n[data-testid=\"platform-board-kit.ui.card.card\"] { margin-bottom: 1px !important; }\n/* Compact inner padding — applies once inner structure renders */\n[data-testid=\"platform-card.ui.card.focus-container\"] + div > div > div { padding: 6px 8px !important; }\n[data-component-selector=\"platform-card.ui.card.card-content.content-section\"]:not([data-testid=\"platform-card.ui.card.card-content.footer\"]) { margin-bottom: 2px !important; }\n[data-testid=\"issue-field-summary-inline-edit.ui.read\"] { font-size: 12px !important; line-height: 16px !important; padding: 1px 0 !important; }\n[data-testid=\"issue-field-summary-inline-edit.ui.read\"] span { padding-right: 16px !important; }\n[data-testid=\"platform-card.ui.card.card-content.footer\"] { padding-top: 0 !important; margin-top: 2px !important; }\n[data-testid=\"platform-card.ui.card.card-content.footer\"] img { width: 14px !important; height: 14px !important; }\n[data-testid=\"platform-card.common.ui.key.key\"] { font-size: 11px !important; }\n{{/compactCards}}\n{{#ultraCompact}}\n/* Ultra-compact: minimal padding, single-line titles, hide key and avatar */\n[data-testid=\"platform-card.ui.card.focus-container\"] + div > div > div { padding: 3px 6px !important; }\n[data-component-selector=\"platform-card.ui.card.card-content.content-section\"]:not([data-testid=\"platform-card.ui.card.card-content.footer\"]) { margin-bottom: 0 !important; }\n[data-testid=\"issue-field-summary-inline-edit.ui.read\"] { font-size: 11px !important; line-height: 14px !important; padding: 0 !important; }\n[data-testid=\"issue-field-summary-inline-edit.ui.read\"] span { -webkit-line-clamp: 1 !important; display: -webkit-box !important; -webkit-box-orient: vertical !important; overflow: hidden !important; padding-right: 4px !important; }\n[data-testid=\"platform-card.common.ui.key.key\"] { display: none !important; }\n[data-testid=\"software-board.common.fields.assignee-field-static.avatar-wrapper\"] { display: none !important; }\n[data-testid=\"platform-card.ui.card.card-content.footer\"] { margin-top: 0 !important; }\n[data-testid=\"platform-card.ui.card.card-content.footer\"] img { width: 12px !important; height: 12px !important; }\n{{/ultraCompact}}\n{{#stickyHeaders}}\n/* Sticky column headers */\n[data-testid=\"platform-board-kit.common.ui.column-header.header.column-header-container\"] { position: sticky !important; top: 0 !important; z-index: 10 !important; background: var(--ds-surface, #1d1e20) !important; }\n{{/stickyHeaders}}\n{{#equalColumns}}\n/* Equal-width columns */\n[data-testid=\"platform-board-kit.ui.column.draggable-column.styled-wrapper\"] { flex: 1 1 0 !important; min-width: 200px !important; max-width: none !important; }\n{{/equalColumns}}\n{{#cardCountBadges}}\n/* Prominent card count badges */\n[data-testid=\"platform-board-kit.common.ui.column-header.editable-title.column-title.column-title\"] + div { background: var(--ds-background-neutral, #333) !important; border-radius: 10px !important; padding: 1px 7px !important; font-weight: 600 !important; font-size: 11px !important; }\n{{/cardCountBadges}}",
+    "html": "",
+    "js": "if (api.options.fullScreenMode) {\n  (function() {\n    var STORAGE_KEY = '__domo_jira_fullscreen';\n    var isFullScreen = false;\n    try { isFullScreen = localStorage.getItem(STORAGE_KEY) === 'true'; } catch(e) {}\n\n    var styleEl = document.createElement('style');\n    styleEl.id = '__domo_jira_fullscreen_style';\n    document.head.appendChild(styleEl);\n    api.onCleanup(function() { if (styleEl.parentNode) styleEl.parentNode.removeChild(styleEl); });\n\n    var fullScreenCSS = [\n      '[data-testid=\"page-layout.sidebar\"] { display: none !important; width: 0 !important; }',\n      '[data-testid=\"sidebar-entry.panel-splitter-container\"] { display: none !important; }',\n      '[data-testid=\"sidebar-entry.panel-splitter\"] { display: none !important; }',\n      '[data-testid=\"horizontal-nav.ui.content.horizontal-nav\"] { display: none !important; }',\n      '[data-testid=\"horizontal-nav-header.ui.project-header.header\"] { display: none !important; }',\n      '[data-testid=\"page-layout.main\"] { margin-left: 0 !important; }',\n      '[data-testid=\"software-board.board\"] { height: calc(100vh - 80px) !important; }'\n    ].join('\\n');\n\n    function applyFullScreen(on) {\n      isFullScreen = on;\n      styleEl.textContent = on ? fullScreenCSS : '';\n      try { localStorage.setItem(STORAGE_KEY, on ? 'true' : 'false'); } catch(e) {}\n      if (btn) btn.textContent = on ? 'Exit Focus' : 'Focus Mode';\n    }\n\n    var btn = document.createElement('button');\n    btn.textContent = isFullScreen ? 'Exit Focus' : 'Focus Mode';\n    btn.style.cssText = 'position:fixed;bottom:16px;right:16px;z-index:99999;padding:6px 14px;border-radius:6px;border:1px solid var(--ds-border,#444);background:var(--ds-surface-overlay,#2c2d30);color:var(--ds-text,#dee1e6);font-size:12px;cursor:pointer;font-family:inherit;box-shadow:0 2px 8px rgba(0,0,0,0.3);transition:opacity 0.2s;opacity:0.7;';\n    btn.addEventListener('mouseenter', function() { btn.style.opacity = '1'; });\n    btn.addEventListener('mouseleave', function() { btn.style.opacity = '0.7'; });\n    btn.addEventListener('click', function() { applyFullScreen(!isFullScreen); });\n    document.body.appendChild(btn);\n    api.onCleanup(function() { if (btn.parentNode) btn.parentNode.removeChild(btn); });\n\n    function onKeyDown(e) {\n      if (e.altKey && e.key === 'f' && !e.target.closest('input, textarea, [contenteditable]')) {\n        e.preventDefault();\n        applyFullScreen(!isFullScreen);\n      }\n    }\n    document.addEventListener('keydown', onKeyDown);\n    api.onCleanup(function() { document.removeEventListener('keydown', onKeyDown); });\n\n    if (isFullScreen) applyFullScreen(true);\n  })();\n}"
+  }
+}

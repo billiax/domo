@@ -1,0 +1,54 @@
+{
+  "id": "github-cleanup",
+  "name": "GitHub Menu Cleanup",
+  "description": "Hide distracting GitHub menu items, expand sidebar repos, and clean up empty menu sections",
+  "author": "billiax",
+  "version": "1.0.0",
+  "tags": ["github", "cleanup", "productivity"],
+  "website": "github.com",
+  "platform": "github",
+  "match": { "type": "site", "host": "github.com" },
+  "defaultPriority": 40,
+  "options": {
+    "hideDiscussions": {
+      "type": "boolean",
+      "default": true,
+      "label": "Hide Discussions"
+    },
+    "hideCodespaces": {
+      "type": "boolean",
+      "default": true,
+      "label": "Hide Codespaces"
+    },
+    "hideExplore": {
+      "type": "boolean",
+      "default": true,
+      "label": "Hide Explore"
+    },
+    "hideMarketplace": {
+      "type": "boolean",
+      "default": true,
+      "label": "Hide Marketplace"
+    },
+    "hideMcp": {
+      "type": "boolean",
+      "default": true,
+      "label": "Hide MCP"
+    },
+    "hideCopilot": {
+      "type": "boolean",
+      "default": true,
+      "label": "Hide Copilot"
+    },
+    "expandSidebarRepos": {
+      "type": "boolean",
+      "default": true,
+      "label": "Show more repos in sidebar"
+    }
+  },
+  "code": {
+    "css": "{{#hideDiscussions}}\na[href=\"/discussions\"], li:has(> a[href=\"/discussions\"]) { display: none !important; }\n{{/hideDiscussions}}\n{{#hideCodespaces}}\na[href=\"/codespaces\"], li:has(> a[href=\"/codespaces\"]) { display: none !important; }\n{{/hideCodespaces}}\n{{#hideExplore}}\na[href=\"/explore\"], li:has(> a[href=\"/explore\"]) { display: none !important; }\n{{/hideExplore}}\n{{#hideMarketplace}}\na[href=\"/marketplace\"], li:has(> a[href=\"/marketplace\"]) { display: none !important; }\n{{/hideMarketplace}}\n{{#hideMcp}}\na[href=\"/mcp\"], li:has(> a[href=\"/mcp\"]) { display: none !important; }\n{{/hideMcp}}\n{{#hideCopilot}}\na[href=\"/copilot\"]:not(#__billiax-toolbar a), li:has(> a[href=\"/copilot\"]) { display: none !important; }\n{{/hideCopilot}}\n{{#expandSidebarRepos}}\n.AppHeader nav [class*=\"ActionList\"] li:nth-child(n+6):not(:last-child) { display: list-item !important; }\n{{/expandSidebarRepos}}\n\n/* Collapse empty menu separators and sections */\ndialog nav > ul > li:empty { display: none !important; }\ndialog nav > ul > li:has(> ul:empty) { display: none !important; }\ndialog nav > ul > li[class*=\"ActionList-sectionDivider\"]:has(+ li:empty),\ndialog nav > ul > li[class*=\"ActionList-sectionDivider\"]:has(+ li > ul:empty) { display: none !important; }\ndialog nav > ul > li:not(:has(a:not([style*=\"display: none\"]))) { margin: 0 !important; padding: 0 !important; min-height: 0 !important; height: 0 !important; overflow: hidden !important; }",
+    "html": "",
+    "js": ""
+  }
+}

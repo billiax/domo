@@ -1,0 +1,50 @@
+{
+  "name": "domo",
+  "version": "1.0.0",
+  "description": "Community-driven plugin platform for per-URL web personalization via CSS, HTML, and JS injection.",
+  "license": "MIT",
+  "author": "Billiax",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/billiax/domo.git"
+  },
+  "homepage": "https://github.com/billiax/domo",
+  "bugs": {
+    "url": "https://github.com/billiax/domo/issues"
+  },
+  "keywords": [
+    "chrome-extension",
+    "css-injection",
+    "web-personalization",
+    "userscript",
+    "userstyle",
+    "browser-extension",
+    "manifest-v3",
+    "plugins"
+  ],
+  "scripts": {
+    "build:ext": "node scripts/build-ext.js",
+    "watch:ext": "node scripts/watch-ext.js",
+    "typecheck": "tsc --noEmit",
+    "typecheck:watch": "tsc --noEmit --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "package": "node scripts/package-ext.js"
+  },
+  "devDependencies": {
+    "chrome-types": "^0.1.423",
+    "esbuild": "^0.27.4",
+    "happy-dom": "^20.8.4",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.0"
+  },
+  "dependencies": {
+    "@codemirror/lang-css": "^6.3.1",
+    "@codemirror/lang-html": "^6.4.11",
+    "@codemirror/lang-javascript": "^6.2.5",
+    "@codemirror/state": "^6.6.0",
+    "@codemirror/theme-one-dark": "^6.1.3",
+    "@codemirror/view": "^6.40.0"
+  }
+}

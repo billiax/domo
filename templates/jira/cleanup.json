@@ -1,0 +1,69 @@
+{
+  "id": "jira-cleanup",
+  "name": "Jira UI Cleanup",
+  "description": "Hide promotional banners, upgrade nudges, feedback buttons, and UI clutter from Jira Cloud",
+  "author": "billiax",
+  "version": "1.0.0",
+  "tags": ["jira", "cleanup", "productivity"],
+  "website": "*.atlassian.net",
+  "platform": "jira",
+  "match": { "type": "site", "host": "*.atlassian.net" },
+  "defaultPriority": 40,
+  "options": {
+    "hidePremiumUpsell": {
+      "type": "boolean",
+      "default": true,
+      "label": "Hide \"See plans\" premium upsell button"
+    },
+    "hideFeedback": {
+      "type": "boolean",
+      "default": true,
+      "label": "Hide \"Give feedback\" button"
+    },
+    "hideInsights": {
+      "type": "boolean",
+      "default": true,
+      "label": "Hide \"Board insights\" button"
+    },
+    "hideRecommended": {
+      "type": "boolean",
+      "default": true,
+      "label": "Hide sidebar \"Recommended\" section"
+    },
+    "hideTeamLinks": {
+      "type": "boolean",
+      "default": true,
+      "label": "Hide \"Link contributing teams\" button"
+    },
+    "hideAddToNav": {
+      "type": "boolean",
+      "default": true,
+      "label": "Hide \"Add to navigation\" button"
+    },
+    "hideHelpBadge": {
+      "type": "boolean",
+      "default": true,
+      "label": "Hide Help button notification badge"
+    },
+    "hidePromoBanners": {
+      "type": "boolean",
+      "default": true,
+      "label": "Hide promotional banners and ad controls"
+    },
+    "hideOnboarding": {
+      "type": "boolean",
+      "default": true,
+      "label": "Hide onboarding spotlights and tooltips"
+    },
+    "compactHeader": {
+      "type": "boolean",
+      "default": true,
+      "label": "Reduce header padding for more space"
+    }
+  },
+  "code": {
+    "css": "{{#hideFeedback}}\n[data-testid=\"feedback-button.horizontal-nav-feedback-button\"] { display: none !important; }\n{{/hideFeedback}}\n{{#hideInsights}}\n[data-testid=\"insights-show-insights-button.ui.insights-button\"] { display: none !important; }\n{{/hideInsights}}\n{{#hideRecommended}}\n[data-testid=\"side-nav-recommendation.jira-side-nav\"] { display: none !important; }\n{{/hideRecommended}}\n{{#hideTeamLinks}}\n[data-testid=\"team-button-trigger\"] { display: none !important; }\n{{/hideTeamLinks}}\n{{#hideAddToNav}}\n[data-testid=\"navigation-kit-add-tab.ui.trigger\"] { display: none !important; }\n{{/hideAddToNav}}\n{{#hidePromoBanners}}\n[data-testid=\"post-office-ad-controls-dropdown--trigger\"] { display: none !important; }\n[id*=\"ad-controls\"] { display: none !important; }\n[data-testid*=\"post-office\"] { display: none !important; }\n[role=\"banner\"] [href*=\"premium\"], [role=\"banner\"] [href*=\"plans\"] { display: none !important; }\n{{/hidePromoBanners}}\n{{#hideOnboarding}}\n[data-testid*=\"spotlight\"][role=\"dialog\"] { display: none !important; }\n[data-testid*=\"onboarding\"] { display: none !important; }\n{{/hideOnboarding}}\n{{#compactHeader}}\n[data-testid=\"horizontal-nav-header.ui.project-header.header\"] { padding-top: 4px !important; padding-bottom: 4px !important; min-height: unset !important; }\n[data-testid=\"horizontal-nav.ui.content.horizontal-nav\"] { padding-top: 0 !important; padding-bottom: 0 !important; }\n{{/compactHeader}}",
+    "html": "",
+    "js": "(function() {\n  function hideBadge() {\n    if (!api.options.hideHelpBadge) return;\n    var helpTrigger = document.querySelector('[data-testid=\"atlassian-navigation--secondary-actions--help--menu-trigger\"]');\n    if (!helpTrigger) return;\n    var divs = helpTrigger.querySelectorAll('div');\n    for (var i = 0; i < divs.length; i++) {\n      var t = divs[i].textContent.trim();\n      if (/^\\d+\\+?$/.test(t) && divs[i].children.length === 0) {\n        divs[i].style.display = 'none';\n      }\n    }\n  }\n\n  function hideSeePlans() {\n    if (!api.options.hidePremiumUpsell) return;\n    var actionsList = document.querySelector('[data-testid=\"page-layout.top-nav\"] nav [role=\"list\"]');\n    if (!actionsList) return;\n    var children = actionsList.children;\n    for (var i = 0; i < children.length; i++) {\n      if (children[i].tagName === 'BUTTON' && children[i].textContent.trim() === 'See plans') {\n        children[i].style.display = 'none';\n      }\n    }\n  }\n\n  function hideRecommended() {\n    if (!api.options.hideRecommended) return;\n    var headings = document.querySelectorAll('h2');\n    for (var i = 0; i < headings.length; i++) {\n      if (headings[i].textContent.trim() === 'Recommended') {\n        var container = headings[i].closest('[role=\"group\"]');\n        if (container) {\n          container.style.display = 'none';\n        } else {\n          headings[i].parentElement.style.display = 'none';\n        }\n      }\n    }\n  }\n\n  function run() {\n    hideBadge();\n    hideSeePlans();\n    hideRecommended();\n  }\n\n  run();\n  var debounce = null;\n  var observer = new MutationObserver(function() {\n    if (debounce) return;\n    debounce = setTimeout(function() { debounce = null; run(); }, 200);\n  });\n  observer.observe(document.body, { childList: true, subtree: true });\n  api.onCleanup(function() { observer.disconnect(); if (debounce) clearTimeout(debounce); });\n})();"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "id": "github-tweaks",
+  "name": "GitHub Tweaks",
+  "description": "Auto-expand hamburger menu repos and auto-switch to dev branch on repo pages",
+  "author": "billiax",
+  "version": "1.0.0",
+  "tags": ["github", "automation", "productivity"],
+  "website": "github.com",
+  "platform": "github",
+  "match": { "type": "site", "host": "github.com" },
+  "defaultPriority": 60,
+  "options": {
+    "autoExpand": {
+      "type": "boolean",
+      "default": true,
+      "label": "Auto-expand hamburger menu repos"
+    },
+    "autoDevBranch": {
+      "type": "boolean",
+      "default": true,
+      "label": "Auto-switch to dev branch on repo pages"
+    }
+  },
+  "code": {
+    "css": "",
+    "html": "",
+    "js": "if (api.options.autoExpand) {\n  (function() {\n    function expandOnce(root) {\n      if (!root) return;\n      var btns = root.querySelectorAll('button');\n      for (var i = 0; i < btns.length; i++) {\n        var txt = btns[i].textContent.trim();\n        if (txt.indexOf('Show') === 0 && txt.indexOf('more') !== -1) {\n          btns[i].click();\n          api.log('Clicked: ' + txt);\n          return;\n        }\n      }\n    }\n    var lastExpandTime = 0;\n    var debounceTimer = null;\n    var observer = new MutationObserver(function() {\n      if (debounceTimer) return;\n      var now = Date.now();\n      if (now - lastExpandTime < 2000) return;\n      debounceTimer = setTimeout(function() {\n        debounceTimer = null;\n        var dialog = document.querySelector('.prc-Dialog-Dialog-G8cDF, div[role=\"dialog\"]');\n        if (dialog) {\n          lastExpandTime = Date.now();\n          expandOnce(dialog);\n        }\n      }, 250);\n    });\n    observer.observe(document.body, { childList: true, subtree: true });\n    api.log('Hamburger auto-expand initialized');\n  })();\n}\n\nif (api.options.autoDevBranch) {\n  (function() {\n    var path = location.pathname.split('/').filter(Boolean);\n    if (path.length !== 2) return;\n    if (location.search || location.hash) return;\n    var repoKey = path[0] + '/' + path[1];\n    var CACHE_KEY = '__billiax_dev_branches';\n    var cache = {};\n    try { cache = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}'); } catch {}\n    function switchToDev() {\n      if (!location.pathname.includes('/tree/dev')) {\n        api.log('Switching to dev branch for ' + repoKey);\n        location.replace('/' + repoKey + '/tree/dev');\n      }\n    }\n    if (cache[repoKey] === true) { switchToDev(); return; }\n    if (cache[repoKey] === false) return;\n    fetch(location.href, { credentials: 'same-origin' })\n      .then(function(r) { return r.text(); })\n      .then(function(html) {\n        var hasDev = html.indexOf('/tree/dev') !== -1 || html.indexOf('\"dev\"') !== -1;\n        cache[repoKey] = hasDev;\n        try { localStorage.setItem(CACHE_KEY, JSON.stringify(cache)); } catch {}\n        if (hasDev) switchToDev();\n      })\n      .catch(function() {});\n  })();\n}"
+  }
+}
